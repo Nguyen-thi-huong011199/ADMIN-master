@@ -2,13 +2,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 
- const baseUrl = environment.apiUrl + "Loaicongviecs/";
+ const baseUrl = environment.apiUrl + "Khuvucs/";
 
  @Injectable({
   providedIn: 'root'
  })
 
- export class LoaiCongViecService {
+ export class KhuvucService {
     constructor(
      private _http: HttpClient
      ) { }

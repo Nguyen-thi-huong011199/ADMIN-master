@@ -37,7 +37,7 @@ export class LoaicvComponent extends BaseComponent implements OnInit,  AfterView
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      TenloaiCV: ['', Validators.required],
+      TenloaiCv: ['', Validators.required],
     });
 
     this.onLoadAll();
@@ -52,7 +52,8 @@ export class LoaicvComponent extends BaseComponent implements OnInit,  AfterView
     .then(res => {
       this.totalRecords = res.rowCount;
       this.data = res.results;
-      
+
+      // console.log(res);
     })
     .catch(err => console.log(err));
   }
@@ -70,7 +71,7 @@ export class LoaicvComponent extends BaseComponent implements OnInit,  AfterView
     this.isCreate = true;
 
     this.form.patchValue({
-      TenloaiCV: '',
+      TenloaiCv: '',
     });
     this.openModal();
   }
@@ -112,8 +113,8 @@ export class LoaicvComponent extends BaseComponent implements OnInit,  AfterView
     this.loading = true;
 
     let formData = {
-      MaloaiCV: this.id_update,
-      TenloaiCV: this.form.value.TenloaiCV,
+      MaloaiCv: this.id_update,
+      TenloaiCv: this.form.value.TenloaiCv,
     };
 
     if(this.isCreate) {

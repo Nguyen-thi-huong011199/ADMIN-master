@@ -21,10 +21,7 @@
                                     <th>Địa chỉ</th>   
                                     <th>Ảnh</th>   
                                     <th>Ngày đăng</th>   
-                                    <th>Lượt xem</th>   
-                                    <th>Mã loại công việc</th>
-                                    <th>Mã nhà tuyển dụng</th>
-                                    <th>Mã khu vực</th>   
+                                    <th>Lượt xem</th>
                                     <th>Tùy chọn</th>
                                 </tr>
                             </ng-template>
@@ -37,10 +34,7 @@
                                     <td innerHTML="{{item.motaCv | truncate:60}}"></td>
                                     <td>{{item.mucluong}}</td>
                                     <td>{{item.diachi}}</td>
-                                    <td><img src="{{item.anh | getImage:1}}" height="80" width="80"></td>
-                                    <td>{{item.maloaiCv}}</td>
-                                    <td>{{item.maNtd}}</td>
-                                    <td>{{item.maKv}}</td>
+                                    <td><img src="{{item.anh | getImage}}" height="80" width="80"></td>
                                     <td>{{item.ngaydang}}</td>
                                     <td>{{item.luotxem}}</td>
                                     
@@ -86,26 +80,52 @@
                                 <div *ngIf="f.TenCv.errors.required" class="alert alert-danger mt-1">Vui lòng nhập tên việc làm</div>
                             </ng-container>
                         </div>
-                    </div> 	
+                    </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">
                             Loại công việc <span class="required">*</span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <select formControlName="MaloaiCv" class="form-control">
-                                <option *ngFor="let item of loaisps" value="{{item.maloaiCv}}">{{item.tenloaiCv}}</option>
+                                <option *ngFor="let item of loaicvs" value="{{item.maloaiCv}}">{{item.tenloaiCv}}</option>
                             </select>
                             <ng-container *ngIf="submitted && f.MaloaiCv.errors">
-                                <div *ngIf="f.MaloaiCv.errors.required" class="alert alert-danger mt-1">Vui lòng chọn danh mục</div>
+                                <div *ngIf="f.MaloaiCv.errors.required" class="alert alert-danger mt-1">Vui lòng chọn</div>
                             </ng-container>
                         </div>
-                    </div> 
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Nhà tuyển dụng <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select formControlName="MaNtd" class="form-control">
+                                <option *ngFor="let item of nhatuyendungs" value="{{item.maNtd}}">{{item.tenNtd}}</option>
+                            </select>
+                            <ng-container *ngIf="submitted && f.MaNtd.errors">
+                                <div *ngIf="f.MaNtd.errors.required" class="alert alert-danger mt-1">Vui lòng chọn</div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            Khu vực <span class="required">*</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select formControlName="MaKv" class="form-control">
+                                <option *ngFor="let item of khuvucs" value="{{item.maKv}}">{{item.tenKv}}</option>
+                            </select>
+                            <ng-container *ngIf="submitted && f.MaKv.errors">
+                                <div *ngIf="f.MaKv.errors.required" class="alert alert-danger mt-1">Vui lòng chọn</div>
+                            </ng-container>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">
                             Tên công ty<span class="required">*</span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="number" class="form-control" formControlName="Tencongty">
+                            <input type="text" class="form-control" formControlName="Tencongty">
                             <ng-container *ngIf="submitted && f.Tencongty.errors">
                                 <div *ngIf="f.Tencongty.errors.required" class="alert alert-danger mt-1">Vui lòng nhập tên công ty</div>
                             </ng-container>
@@ -127,7 +147,7 @@
                             Mức lương<span class="required">*</span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="number" class="form-control" formControlName="Mucluong">
+                            <input type="text" class="form-control" formControlName="Mucluong">
                             <ng-container *ngIf="submitted && f.Mucluong.errors">
                                 <div *ngIf="f.Mucluong.errors.required" class="alert alert-danger mt-1">Vui lòng nhập tên mức lương</div>
                             </ng-container>
@@ -138,10 +158,9 @@
                             Địa chỉ <span class="required">*</span>
                         </label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="number" class="form-control" formControlName="Diachi">
+                            <input type="text" class="form-control" formControlName="Diachi">
                             <ng-container *ngIf="submitted && f.Diachi.errors">
                                 <div *ngIf="f.Diachi.errors.required" class="alert alert-danger mt-1">Vui lòng nhập địa chỉ</div>
-                                <div *ngIf="f.Diachi.errors.pattern" class="alert alert-danger mt-1">Giá trị nhập không hợp lệ</div>
                             </ng-container>
                         </div>
                     </div> 
@@ -155,30 +174,6 @@
                             <p-fileUpload #file_image mode="advanced" [showUploadButton]="false" [showCancelButton]="false" chooseLabel ="Chọn ảnh" [multiple]="false" accept="image/*" maxFileSize="1000000">
                             </p-fileUpload>
                             <div *ngIf="submitted && isCreate && !file_image.hasFiles()" class="alert alert-danger mt-1">Vui lòng chọn một file ảnh</div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                            Ngày đăng
-                        </label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="number" class="form-control" formControlName="Ngaydang">
-                            <ng-container *ngIf="submitted && f.Ngaydang.errors">
-                                <div *ngIf="f.Ngaydang.errors.required" class="alert alert-danger mt-1">Vui lòng nhập ngày đăng</div>
-                                <div *ngIf="f.Ngaydang.errors.pattern" class="alert alert-danger mt-1">Giá trị nhập không hợp lệ</div>
-                            </ng-container>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                            Lượt xem
-                        </label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="number" class="form-control" formControlName="Luotxem">
-                            <ng-container *ngIf="submitted && f.Luotxem.errors">
-                                <div *ngIf="f.Luotxem.errors.required" class="alert alert-danger mt-1">Vui lòng nhập lượt xem</div>
-                                <div *ngIf="f.Luotxem.errors.pattern" class="alert alert-danger mt-1">Giá trị nhập không hợp lệ</div>
-                            </ng-container>
                         </div>
                     </div>
                 </div>

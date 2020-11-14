@@ -6,6 +6,8 @@ import { AlertService } from '../_services/alert.service';
 import { FileService } from '../_services/file.service';
 import { ViecLamService } from '../_services/vieclam.service';
 import { LoaiCongViecService } from '../_services/loaicv.service';
+import { NhatuyendungService } from '../_services/nhatuyendung.service';
+import { KhuvucService } from '../_services/khuvuc.service';
 
 declare var $: any;
 
@@ -24,7 +26,9 @@ export class VieclamComponent extends BaseComponent implements OnInit, AfterView
   pageSize: number = 10;
   page: number = 1;
   id_update: any;
-  loaisps: any = [];
+  loaicvs: any = [];
+  nhatuyendungs: any = [];
+  khuvucs: any = [];
   data: any = [];
   
   @ViewChild(FileUpload, { static: false }) file_image: FileUpload;
@@ -32,6 +36,8 @@ export class VieclamComponent extends BaseComponent implements OnInit, AfterView
   constructor(injector: Injector,
     private vieclamService: ViecLamService,
     private loaicvService: LoaiCongViecService,
+    private nhatuyendungService: NhatuyendungService,
+    private khuvucService: KhuvucService,
     private formBuilder: FormBuilder,
     private alert: AlertService,
     private fileService: FileService
@@ -42,15 +48,28 @@ export class VieclamComponent extends BaseComponent implements OnInit, AfterView
   ngOnInit(): void {
     this.loaicvService.getAll().toPromise()
     .then(res => {
-      this.loaisps = res;
+      this.loaicvs = res;
+    });
+
+    this.nhatuyendungService.getAll().toPromise()
+    .then(res => {
+      this.nhatuyendungs = res;
+    });
+
+    this.khuvucService.getAll().toPromise()
+    .then(res => {
+      this.khuvucs = res;
     });
 
     this.form = this.formBuilder.group({
-      TenSP: ['', Validators.required],
-      MaLoai: ['', Validators.required],
-      MoTa: ['', Validators.required],
-      SoLuong: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
-      Gia: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      MaloaiCv: ['', Validators.required],
+      MaNtd: ['', Validators.required],
+      MaKv: ['', Validators.required],
+      TenCv: ['', Validators.required],
+      Tencongty: ['', Validators.required],
+      MotaCv: ['', Validators.required],
+      Mucluong: ['', Validators.required],
+      Diachi: ['', Validators.required],
     });
 
     this.onLoadAll();
@@ -66,7 +85,7 @@ export class VieclamComponent extends BaseComponent implements OnInit, AfterView
       this.totalRecords = res.rowCount;
       this.data = res.results;
     })
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
   }
 
   onLoadPage(page) {
@@ -82,11 +101,14 @@ export class VieclamComponent extends BaseComponent implements OnInit, AfterView
     this.isCreate = true;
 
     this.form.patchValue({
-      TenSP: '',
-      MaLoai: '',
-      MoTa: '',
-      SoLuong: '',
-      Gia: '',
+      MaloaiCv: '',
+      MaNtd: '',
+      MaKv: '',
+      TenCv: '',
+      Tencongty: '',
+      MotaCv: '',
+      Mucluong: '',
+      Diachi: '',
     });
 
     this.file_image.clear();
@@ -96,14 +118,17 @@ export class VieclamComponent extends BaseComponent implements OnInit, AfterView
   onEdit(item) {
     this.isCreate = false;
 
-    this.id_update = item.maSp;
+    this.id_update = item.maCv;
 
     this.form.patchValue({
-      TenSP: item.tenSp,
-      MaLoai: item.maLoai,
-      MoTa: item.moTa,
-      SoLuong: item.soLuong,
-      Gia: item.gia,
+      MaloaiCv: item.maloaiCv,
+      MaNtd: item.maNtd,
+      MaKv: item.maKv,
+      TenCv: item.tenCv,
+      Tencongty: item.tencongty,
+      MotaCv: item.motaCv,
+      Mucluong: item.mucluong,
+      Diachi: item.diachi,
     });
 
     this.file_image.clear();
@@ -113,7 +138,7 @@ export class VieclamComponent extends BaseComponent implements OnInit, AfterView
   onDelete(item) {
     this.alert.delete(() => {
       this.loading = true;
-      this.vieclamService.delete(item.maSp).toPromise()
+      this.vieclamService.delete(item.maCv).toPromise()
       .then(res => {
         this.loading = false;
         this.alert.success("Đã xóa sản phẩm thành công!");
@@ -138,26 +163,29 @@ export class VieclamComponent extends BaseComponent implements OnInit, AfterView
     this.loading = true;
 
     let formData = {
-      MaLoai: this.form.value.MaLoai,
-      TenSP: this.form.value.TenSP,
-      MoTa: this.form.value.MoTa,
-      SoLuong: this.form.value.SoLuong,
-      Gia: this.form.value.Gia,
-      HinhAnh: undefined
+      MaloaiCv: this.form.value.MaloaiCv,
+      MaNtd: this.form.value.MaNtd,
+      MaKv: this.form.value.MaKv,
+      TenCv: this.form.value.TenCv,
+      Tencongty: this.form.value.Tencongty,
+      MotaCv: this.form.value.MotaCv,
+      Mucluong: this.form.value.Mucluong,
+      Diachi: this.form.value.Diachi,
+      Anh: undefined
     };
 
     if(this.isCreate) {
 
       this.fileService.getEncodeFromImage(file).subscribe(data => {
         if(data != null) {
-          formData.HinhAnh = data;
+          formData.Anh = data;
 
           this.vieclamService.create(formData).toPromise()
           .then(res => {
             this.loading = false;
             this.onLoadAll();
             this.closeModal();
-            this.alert.success("Đã thêm sản phẩm thành công!");
+            this.alert.success("Đã thêm công việc thành công!");
           })
           .catch(err => {
             this.loading = false;
@@ -170,7 +198,7 @@ export class VieclamComponent extends BaseComponent implements OnInit, AfterView
 
       this.fileService.getEncodeFromImage(file).subscribe(data => {
         if(data != null) {
-          formData.HinhAnh = data;
+          formData.Anh = data;
         }
 
         this.vieclamService.update(this.id_update, formData).toPromise()
