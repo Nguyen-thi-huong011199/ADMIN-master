@@ -11,6 +11,9 @@ import { ShareModule } from './share/share.module';
 import { HttpClientModule } from '@angular/common/http';
 import { LoaicvComponent } from './loaicv/loaicv.component';
 import { VieclamComponent } from './vieclam/vieclam.component';
+import { KhuvucComponent } from './khuvuc/khuvuc.component';
+import { UserndComponent } from './usernd/usernd.component';
+import { HosoComponent } from './hoso/hoso.component';
 
 
 @NgModule({
@@ -20,6 +23,9 @@ import { VieclamComponent } from './vieclam/vieclam.component';
     CuoitrangComponent,
     LoaicvComponent,
     VieclamComponent,
+    KhuvucComponent,
+    UserndComponent,
+    HosoComponent,
    
   
   ],
